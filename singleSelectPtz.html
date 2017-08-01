@@ -1,0 +1,59 @@
+<script type="text/ng-template" id="select-native-{{viewid}}.html" role="presentation">
+    <select class="form-control" ng-class="'bpm-input-'+textSize" aria-labelledby="single-select-label-{{viewid}}"
+            ng-disabled="disabled" ng-model="$parent.$parent.selectedValue" ng-change="selected($parent.selectedValue)" ng-required="required"
+            ng-options="option as getItemName(option, true) for option in options" dir="{{textDirection}}">
+	<option style="display:none" value=""></option>
+    </select>
+</script>
+
+<script type="text/ng-template" id="select-{{viewid}}.html" role="presentation">
+    <div class="input-group" ng-class="{open: toggler.toggle}" bpm-select-dropdown aria-labelledby="single-select-label-{{viewid}}">
+        <ul id="single-select-listbox-{{viewid}}" aria-labelledby="single-select-input-{{viewid}}" role="listbox" tabindex="0"
+            class="dropdown-menu bpmSelectDropdown bpmFullWidth">
+            <li id="single-select-option-{{$index}}" role="option" tabindex="0" ng-repeat="option in options"
+                ng-class="{active:option==$parent.$parent.selectedValue && option !== null && option !== undefined}">
+                <a id="single-select-anchor-{{$index}}" role="option" ng-click="selected(option)">
+                    <span ng-class="'bpm-label-'+textSize" ng-bind="getItemName(option, true)"></span>
+                </a>
+            </li>
+        </ul>
+        <p>contenido extra: {{text}}</p>
+        <input id="single-select-input-{{viewid}}" aria-labelledby="single-select-label-{{viewid}}" aria-expanded="{{toggler.toggle}}"
+               aria-owns="single-select-listbox-{{viewid}}" aria-activedescendant="{{active.descendant}}" role="combobox" tabindex="0"
+               type="text" dir="{{textDirection}}" class="form-control bpmSelectInput" ng-class="'bpm-input-'+textSize"
+               value="{{getItemName($parent.$parent.selectedValue)}}" ng-click="toggleDropdown()" ng-keypress="toggleDropdown($event)"
+               overrideEnter aria-readonly="true" readonly>
+        <div class="input-group-btn" >
+  	    <button type="button" class="btn btn-default dropdown-toggle bpmSelectDropdownButton form-control"
+                    ng-class="'bpm-input-'+textSize" ng-click="toggleDropdown()"
+                    data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="{{toggler.toggle}}"
+	    >
+    		<svg class="bpm-svg bpm-svg-chevron-down"><use xlink:href="#bpm-svg-chevron-down"></use></svg>
+    		<span class="sr-only" ng-bind="messages.dropDownToggle"></span>
+  	    </button>
+        </div>
+    </div>
+</script>
+
+<div ng-if="!disabled && !nativeSelect">
+    <div class="textLabel ng-cloak" ng-show="showLabel()">
+	<label id="single-select-label-{{viewid}}" class="text control-label" ng-class="'bpm-label-'+textSize" dir="{{textDirection}}" ng-bind="label"></label>
+    </div>
+    <div class="form-group ng-cloak" ng-include="'select-{{viewid}}.html'">
+    </div>
+</div>
+
+<div ng-if="!disabled && nativeSelect">
+    <div class="textLabel ng-cloak" ng-show="showLabel()">
+	<label id="single-select-label-{{viewid}}" class="text control-label" ng-class="'bpm-label-'+textSize" dir="{{textDirection}}" ng-bind="label"></label>
+    </div>
+    <div class="form-group ng-cloak" ng-include="'select-native-{{viewid}}.html'">
+    </div>
+</div>
+
+<div ng-if="disabled" >
+    <div class="textLabel ng-cloak" ng-if="showLabel()">
+	<label id="single-select-label-{{viewid}}" class="text control-label bpmReadOnly" ng-class="'bpm-label-'+textSize" dir="{{textDirection}}" ng-bind="label"></label>
+    </div>
+    <div aria-labelledby="single-select-label-{{viewid}}" ng-bind="getItemName(selectedValue)"></div>
+</div>
